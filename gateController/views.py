@@ -21,13 +21,13 @@ def triggerGate(request):
             led.on()
             sleep(0.5)
             led.off()
-            le2.off()
+            led2.off()
             return HttpResponse(status=200)
         elif command == "vehicle_access":
             led2.on()
             sleep(0.5)
             led.off()
-            le2.off()
+            led2.off()
             return HttpResponse(status=200)
 
     led.off()
