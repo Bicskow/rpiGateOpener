@@ -10,27 +10,21 @@ def index(request):
     return render(request, 'gateController/gateController.html')
 
 def triggerGate(request):
-    led = LED(5)
-    led2 = LED(27)
-    led.off()
-    led2.off()
-
     if request.method =='POST':
         command = request.POST.get('command', '')
         if command == "pedestrian_access":
+            led = LED(2, active_high=False)
             led.on()
             sleep(0.5)
             led.off()
-            led2.off()
+            led.close()
             return HttpResponse(status=200)
         elif command == "vehicle_access":
-            led2.on()
+            led = LED(3, active_high=False)
+            led.on()
             sleep(0.5)
             led.off()
-            led2.off()
+            led.close()
             return HttpResponse(status=200)
-
-    led.off()
-    led2.off()
     return HttpResponseBadRequest(status=400)
     
