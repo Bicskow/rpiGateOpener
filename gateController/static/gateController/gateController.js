@@ -1,3 +1,5 @@
+let timeout;
+
 $(document).ready(function () {
     $(window).on("orientationchange", function () {
         if ($(window).innerHeight() > $(window).innerWidth()) {
@@ -12,9 +14,20 @@ $(document).ready(function () {
     $("#svg_locked").show();
     $("#svg_unlocked").hide();
     $('#svg_unlocked').removeAttr('hidden');
+    triggerTimeout();
 });
 
+function triggerTimeout(){
+    if(timeout){
+        clearTimeout(timeout);
+    }
+    timeout = setTimeout(()=>{
+        open(location, '_self').close();
+    }, 120000);
+}
+
 function unlockClicked() {
+    triggerTimeout();
     $("#vh_acc_btn").prop("disabled", false);
     $("#ped_acc_btn").prop("disabled", false);
     $("#svg_locked").hide();
@@ -29,6 +42,7 @@ function unlockClicked() {
 }
 
 function vehAccClicked() {
+    triggerTimeout();
     $("#vh_acc_btn").prop("disabled", true);
     $("#ped_acc_btn").prop("disabled", true);
     $("#svg_locked").show();
@@ -37,6 +51,7 @@ function vehAccClicked() {
 }
 
 function pedAccClicked() {
+    triggerTimeout();
     $("#vh_acc_btn").prop("disabled", true);
     $("#ped_acc_btn").prop("disabled", true);
     $("#svg_locked").show();
