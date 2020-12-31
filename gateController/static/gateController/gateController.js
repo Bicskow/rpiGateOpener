@@ -53,10 +53,16 @@ function triggerGate(command) {
         type: "POST",
         data: { csrfmiddlewaretoken: token, command: command },
         success: function (data) {
-            ;
+            $(".bi-x").hide();
+            $(".bi-check").show();
+            $('#modal').modal();
+            setTimeout(()=>{$('#modal').modal('hide');}, 750);
         },
         error: function (jXHR, textStatus, errorThrown) {
-            alert(`There was an error communicating with the server: ${errorThrown}.`);
+            $(".bi-x").show();
+            $(".bi-check").hide();
+            $('#modal').modal();
+            //alert(`There was an error communicating with the server: ${errorThrown}.`);
         }
     });
 }
