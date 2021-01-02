@@ -24,7 +24,7 @@ def triggerGate(request):
                 sleep(0.2)
                 led.off()
                 led.close()
-                sendMail("Pesestrian access triggered")
+                sendMail("Pedestrian access triggered")
                 return HttpResponse(status=200)
             elif command == "vehicle_access":
                 led = LED(3, active_high=False)
