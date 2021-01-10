@@ -4,6 +4,8 @@ RPI Gate Opener is a web application which can be used to open electric gates.
 A Raspberry PI is attached to the gate controller with a relay board.
 The single-board computer serves the web application with a Django backend which can trigger the gate via the GPOIs.
 
+<img src="doc/gateOpener.png"/>
+
 ## Features
 - Trigger vehicle access
 - Trigger pedestrian access
