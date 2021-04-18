@@ -26,7 +26,7 @@ SECRET_KEY = 'f_y)g%cj2!l*w8bvvi$$yy6&3j4sc^vb_jjcbc@xvvbl7z7i*m'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.2.212', 'localhost', '192.168.2.146']
+ALLOWED_HOSTS = ['192.168.2.212', 'localhost', '192.168.2.146',  '127.0.0.1']
 
 
 # Application definition
@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'gateController',
+    'channels'
 ]
 
 MIDDLEWARE = [
@@ -121,3 +122,5 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join( BASE_DIR, "static/")
+
+ASGI_APPLICATION = "gateOpener.asgi.application"

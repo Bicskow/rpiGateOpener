@@ -1,4 +1,5 @@
 let timeout;
+let socket;
 
 $(document).ready(function () {
     $(window).on("orientationchange", function () {
@@ -14,6 +15,8 @@ $(document).ready(function () {
     $("#svg_locked").show();
     $("#svg_unlocked").hide();
     $('#svg_unlocked').removeAttr('hidden');   
+    
+    socket = initWebsocket();
 });
 
 function unlockClicked() {
@@ -48,6 +51,10 @@ function pedAccClicked() {
 
 function triggerGate(command) {
     let token = getCookie("csrftoken");
+    socket.send(JSON.stringify({
+        command
+    }));
+    return
     $.ajax({
         url: "triggerGate",
         type: "POST",
@@ -78,4 +85,40 @@ function getCookie(c_name) {
         }
     }
     return "";
+}
+
+function initWebsocket() {
+    $(".bi-x").hide();
+    $(".bi-check").hide();
+    $(".bi-arrow-repeat").show();
+    $('#modal').modal();
+    const socket = new WebSocket(
+        'ws://'
+        + window.location.host
+        + '/ws/'
+    );
+
+    socket.onmessage = function(e) {
+        console.log('Message recived')
+        const data = JSON.parse(e.data);
+        if(data.result === 'gate_triggered'){
+            $(".bi-x").hide();
+            $(".bi-check").show();
+            $(".bi-arrow-repeat").hide();
+            $('#modal').modal();
+            setTimeout(()=>{$('#modal').modal('hide');}, 750);
+        }
+    };
+
+    socket.onclose = function(e) {
+        console.error('Socket closed unexpectedly');
+        initWebsocket();
+    };
+
+    socket.onopen = function() {
+        console.log('Socket openned');
+        $('#modal').modal('hide');
+    }
+
+    return socket;
 }
