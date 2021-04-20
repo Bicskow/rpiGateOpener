@@ -92,7 +92,7 @@ function initWebsocket() {
     $(".bi-check").hide();
     $(".bi-arrow-repeat").show();
     $('#modal').modal();
-    const socket = new WebSocket(
+    socket = new WebSocket(
         'ws://'
         + window.location.host
         + '/ws/'
@@ -107,12 +107,17 @@ function initWebsocket() {
             $(".bi-arrow-repeat").hide();
             $('#modal').modal();
             setTimeout(()=>{$('#modal').modal('hide');}, 750);
+        } else {
+            $(".bi-x").show();
+            $(".bi-check").hide();
+            $(".bi-arrow-repeat").hide();
+            $('#modal').modal();
         }
     };
 
     socket.onclose = function(e) {
         console.error('Socket closed unexpectedly');
-        initWebsocket();
+        socket = initWebsocket();
     };
 
     socket.onopen = function() {
