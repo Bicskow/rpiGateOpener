@@ -86,6 +86,10 @@ function initWebsocket() {
         + '/ws/'
     );
 
+    socket.onopen = function() {
+        $('#modal').modal('hide');
+    }
+
     socket.onmessage = function(e) {
         const data = JSON.parse(e.data);
         if(data.result === 'gate_triggered'){
@@ -99,10 +103,6 @@ function initWebsocket() {
     socket.onclose = function(e) {
         socket = initWebsocket();
     };
-
-    socket.onopen = function() {
-        $('#modal').modal('hide');
-    }
 
     return socket;
 }
