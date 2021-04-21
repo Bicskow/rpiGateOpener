@@ -13,7 +13,7 @@ To ensure minimal latency and feedback for connectivity the commands are sent vi
 </p>
 
 ## Features
-- Indicates if the application is successfuly connected
+- Indicates if the application is successfully connected
 - User interface is automatically locked to prevent accidental activation
 - Trigger vehicle access
 - Trigger pedestrian access
