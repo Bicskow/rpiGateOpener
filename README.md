@@ -6,6 +6,9 @@ The single-board computer serves the web application with a Django backend which
 To ensure minimal latency and feedback for connectivity the commands are sent via WebSocket.
 
 <img src="doc/gateOpener.png"/>
+<img src="doc/gateOpenerLoading.png"/>
+<img src="doc/gateOpenerOk.png"/>
+<img src="doc/gateOpenerError.png"/>
 
 ## Features
 - Indicates if the application is successfuly connected
