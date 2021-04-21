@@ -1,4 +1,11 @@
 let timeout;
+let socket;
+
+const statuses = {
+	CONNECTING: "connecting",
+	OK: "ok",
+	ERROR: "error",
+}
 
 $(document).ready(function () {
     $(window).on("orientationchange", function () {
@@ -9,73 +16,93 @@ $(document).ready(function () {
             $(".cust_col").removeClass("col-md-4").addClass("col-md-12");
         }
     });
-    $("#vh_acc_btn").prop("disabled", true);
-    $("#ped_acc_btn").prop("disabled", true);
-    $("#svg_locked").show();
-    $("#svg_unlocked").hide();
+    setLock(true)
     $('#svg_unlocked').removeAttr('hidden');   
+    
+    socket = initWebsocket();
 });
 
 function unlockClicked() {
-    $("#vh_acc_btn").prop("disabled", false);
-    $("#ped_acc_btn").prop("disabled", false);
-    $("#svg_locked").hide();
-    $("#svg_unlocked").show();
-
+    setLock(false)
     setTimeout(function () {
-        $("#vh_acc_btn").prop("disabled", true);
-        $("#ped_acc_btn").prop("disabled", true);
-        $("#svg_locked").show();
-        $("#svg_unlocked").hide();
+        setLock(true)
     }, 1000);
 }
 
 function vehAccClicked() {
-    $("#vh_acc_btn").prop("disabled", true);
-    $("#ped_acc_btn").prop("disabled", true);
-    $("#svg_locked").show();
-    $("#svg_unlocked").hide();
+    setLock(true)
     triggerGate("vehicle_access");
 }
 
 function pedAccClicked() {
-    $("#vh_acc_btn").prop("disabled", true);
-    $("#ped_acc_btn").prop("disabled", true);
-    $("#svg_locked").show();
-    $("#svg_unlocked").hide();
+    setLock(true)
     triggerGate("pedestrian_access");
 }
 
 function triggerGate(command) {
-    let token = getCookie("csrftoken");
-    $.ajax({
-        url: "triggerGate",
-        type: "POST",
-        data: { csrfmiddlewaretoken: token, command: command },
-        success: function (data) {
-            $(".bi-x").hide();
-            $(".bi-check").show();
-            $('#modal').modal();
-            setTimeout(()=>{$('#modal').modal('hide');}, 750);
-        },
-        error: function (jXHR, textStatus, errorThrown) {
-            $(".bi-x").show();
-            $(".bi-check").hide();
-            $('#modal').modal();
-            //alert(`There was an error communicating with the server: ${errorThrown}.`);
-        }
-    });
+    socket.send(JSON.stringify({command}));
 }
 
-function getCookie(c_name) {
-    if (document.cookie.length > 0) {
-        c_start = document.cookie.indexOf(c_name + "=");
-        if (c_start != -1) {
-            c_start = c_start + c_name.length + 1;
-            c_end = document.cookie.indexOf(";", c_start);
-            if (c_end == -1) c_end = document.cookie.length;
-            return unescape(document.cookie.substring(c_start, c_end));
-        }
+function setLock(locked){
+    if(!locked){
+        $("#vh_acc_btn").prop("disabled", false);
+        $("#ped_acc_btn").prop("disabled", false);
+        $("#svg_locked").hide();
+        $("#svg_unlocked").show();
+    } else {
+        $("#vh_acc_btn").prop("disabled", true);
+        $("#ped_acc_btn").prop("disabled", true);
+        $("#svg_locked").show();
+        $("#svg_unlocked").hide();
     }
-    return "";
+}
+
+function showStatusModal(status){
+    switch(status){
+        case statuses.CONNECTING:
+            $(".bi-x").hide();
+            $(".bi-check").hide();
+            $(".bi-arrow-repeat").show();
+            break
+        case statuses.OK:
+            $(".bi-x").hide();
+            $(".bi-check").show();
+            $(".bi-arrow-repeat").hide();
+            break
+        case statuses.ERROR:
+            $(".bi-x").show();
+            $(".bi-check").hide();
+            $(".bi-arrow-repeat").hide();
+            break  
+    }
+    $('#modal').modal();
+}
+
+function initWebsocket() {
+    showStatusModal(statuses.CONNECTING)
+    socket = new WebSocket(
+        'ws://'
+        + window.location.host
+        + '/ws/'
+    );
+
+    socket.onopen = function() {
+        $('#modal').modal('hide');
+    }
+
+    socket.onmessage = function(e) {
+        const data = JSON.parse(e.data);
+        if(data.result === 'gate_triggered'){
+            showStatusModal(statuses.OK)
+            setTimeout(()=>{$('#modal').modal('hide');}, 750);
+        } else {
+            showStatusModal(statuses.ERROR)
+        }
+    };
+
+    socket.onclose = function(e) {
+        socket = initWebsocket();
+    };
+
+    return socket;
 }
