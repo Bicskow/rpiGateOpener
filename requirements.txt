@@ -45,5 +45,6 @@ twisted-iocpsupport==1.0.1
 txaio==21.2.1
 uritemplate==3.0.1
 urllib3==1.26.2
+whitenoise==5.2.0
 yagmail==0.14.245
 zope.interface==5.4.0
