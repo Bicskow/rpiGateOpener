@@ -26,6 +26,7 @@ hyperlink==21.0.0
 idna==2.10
 incremental==21.3.0
 lxml==4.6.2
+oauth2client==3.0.0
 oauthlib==3.1.0
 premailer==3.7.0
 protobuf==3.14.0
