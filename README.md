@@ -5,8 +5,8 @@ A Raspberry PI is attached to the gate controller with a relay board.
 The single-board computer serves the web application with a Django backend which can trigger the gate via the GPOIs.
 To ensure minimal latency and feedback for connectivity the commands are sent via WebSocket.
 
-<img style="maring:20px;" src="doc/gateOpener.png"/>        <img style="maring:20px;" src="doc/gateOpenerLoading.png"/>
-<img style="maring:20px;" src="doc/gateOpenerOk.png"/>        <img style="maring:20px;" src="doc/gateOpenerError.png"/>
+<img style="margin:20px;" src="doc/gateOpener.png"/><img style="margin:20px;" src="doc/gateOpenerLoading.png"/>
+<img style="margin:20px;" src="doc/gateOpenerOk.png"/><img style="margin:20px;" src="doc/gateOpenerError.png"/>
 
 ## Features
 - Indicates if the application is successfuly connected
