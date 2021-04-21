@@ -9,6 +9,7 @@ To ensure minimal latency and feedback for connectivity the commands are sent vi
 <img align="right" src="doc/gateOpenerLoading.png"/>
 <img align="right" src="doc/gateOpenerOk.png"/>
 <img align="right" src="doc/gateOpenerError.png"/>
+<br />
 
 ## Features
 - Indicates if the application is successfuly connected
