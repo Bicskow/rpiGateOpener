@@ -2,7 +2,7 @@ import json
 from gpiozero import LED
 from time import sleep
 from channels.generic.websocket import WebsocketConsumer
-from . import mailSender
+from .mailSender import MailSender
 
 class GateTriggerConsumer(WebsocketConsumer):
     def connect(self):
@@ -27,7 +27,7 @@ class GateTriggerConsumer(WebsocketConsumer):
                 led.off()
                 led.close()
                 self.send(text_data=json.dumps({'result': 'gate_triggered'}))
-                mailSender.sendMail("Pedestrian access triggered")
+                MailSender.sendMail("Pedestrian access triggered")
                 return
             elif command == "vehicle_access":
                 led = LED(3, active_high=False)
@@ -36,10 +36,10 @@ class GateTriggerConsumer(WebsocketConsumer):
                 led.off()
                 led.close()
                 self.send(text_data=json.dumps({'result': 'gate_triggered'}))
-                mailSender.sendMail("Vehicle access triggered")
+                MailSender.sendMail("Vehicle access triggered")
                 return
             self.send(text_data=json.dumps({'result': 'bad_command'}))
-            mailSender.sendMail("Gate trigger failed with bad command")
+            MailSender.sendMail("Gate trigger failed with bad command")
         except Exception as e:            
             self.send(text_data=json.dumps({'result': 'internal_server_error'}))
-            mailSender.sendMail(f"Gate trigger failed with exception: {e}")
+            MailSender.sendMail(f"Gate trigger failed with exception: {e}")
